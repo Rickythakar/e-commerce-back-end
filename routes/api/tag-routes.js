@@ -12,7 +12,6 @@ router.get('/', (req, res) => {
       attributes: ['product_name','price','stock','category_id' ]
     }
   })
-  
 });
 
 router.get('/:id', (req, res) => {
