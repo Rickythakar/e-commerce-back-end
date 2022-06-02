@@ -7,7 +7,7 @@ router.get('/', async (req, res) => {
   console.log('This is GET /api/categories/');
   // find all categories
   const categoryData = await Category.findAll().catch((err) => {
-      // be sure to include its associated Product data
+    // be sure to include its associated Product data
     res.json(err);
   });
   res.json(categoryData);
@@ -18,7 +18,7 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
   console.log('This is GET /api/categories/id');
   const categoryDataById = await Category.findOne({
-      // be sure to include its associated Product data
+    // be sure to include its associated Product data
     where: {
       id: req.params.id
     }
@@ -34,11 +34,10 @@ router.get('/:id', async (req, res) => {
 // create a new category
 router.post('/', (req, res) => {
   console.log('This is POST /api/categories/');
-  const createCategory = await Category.create().catch((err) => {
-    res.json(err);
-  });
-  res.json(createCategory);
-  // res.sendStatus(200)
+  Category.create(req.body).then((Category) => res.json(Category))
+    .catch((err) => {
+      res.json(err);
+    });
 });
 
 router.put('/:id', (req, res) => {
