@@ -40,12 +40,27 @@ router.post('/', (req, res) => {
     });
 });
 
+
 router.put('/:id', (req, res) => {
   // update a category by its `id` value
 });
 
 router.delete('/:id', (req, res) => {
-  // delete a category by its `id` value
+  // Delete a category by its id
+  console.log('This is DELETE /api/categories/id');
+  Category.destroy({
+    where: {
+      id: req.params.id
+    }
+  })
+  .then((Category) => res.json(Category))
+    // be sure to include its associated Product data
+    .catch((err) => {
+      res.json(err);
+    });
+  res.json(Category);
+  // res.sendStatus(200)
 });
+
 
 module.exports = router;
