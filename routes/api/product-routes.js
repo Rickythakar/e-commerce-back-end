@@ -3,26 +3,37 @@ const { Product, Category, Tag, ProductTag } = require('../../models');
 
 // The `/api/products` endpoint
 
-// get all products
-router.get('/', (req, res) => {
+// get all products--------------------------------------------------------------------------------
+router.get('/', async (req, res) => {
+  console.log('This is GET /api/product/');
   // find all products
-  // be sure to include its associated Category and Tag data
+  const productData = await Product.findAll().catch((err) => {
+    // be sure to include its associated Category and Tag data
+    res.json(err);
+  });
+  res.status(200).json(productData);
 });
 
-// get one product
-router.get('/:id', (req, res) => {
+// get one product---------------------------------------------------------------------------------
+router.get('/:id', async (req, res) => {
   // find a single product by its `id`
-  // be sure to include its associated Category and Tag data
+  const productData = await Product.findOne().catch((err) => {
+    // be sure to include its associated Category and Tag data
+    res.json(err);
+  });
+  res.status(200).json(productData);
 });
 
-// create new product
+
+// create new product------------------------------------------------------------------------------
 router.post('/', (req, res) => {
   /* req.body should look like this...
     {
-      product_name: "Basketball",
-      price: 200.00,
-      stock: 3,
-      tagIds: [1, 2, 3, 4]
+      "product_name": "Basketball",
+      "price": 200.00,
+      "stock": 3,
+      "category_id": 1,
+      "tagIds": 1
     }
   */
   Product.create(req.body)
@@ -47,7 +58,7 @@ router.post('/', (req, res) => {
     });
 });
 
-// update product
+// update product----------------------------------------------------------------------------------
 router.put('/:id', (req, res) => {
   // update product data
   Product.update(req.body, {
@@ -89,8 +100,21 @@ router.put('/:id', (req, res) => {
     });
 });
 
+
+// Delete a product--------------------------------------------------------------------------------
 router.delete('/:id', (req, res) => {
   // delete one product by its `id` value
+  console.log('This is DELETE /api/products/id');
+    Product.destroy({
+    where: {
+      id: req.params.id
+    }
+  })
+    .then((Product) => res.status(200).json(destroyedProduct))
+    // be sure to include its associated Product data
+    .catch((err) => {
+      res.json(err);
+    });
 });
 
 module.exports = router;

@@ -26,8 +26,7 @@ router.get('/:id', async (req, res) => {
     .catch((err) => {
       res.json(err);
     });
-  res.json(categoryDataById);
-  // res.sendStatus(200)
+  res.status(200).json(categoryDataById);
 });
 
 
@@ -42,8 +41,24 @@ router.post('/', (req, res) => {
 
 
 router.put('/:id', (req, res) => {
-  // update a category by its `id` value
+  // Update a category by its category name or id
+  console.log('This is PUT /api/categories/id');
+  Category.update(
+    { category_name: req.body.name },
+    {
+      where: {
+        id: req.params.id
+      }
+    })
+    .then((Category) => res.json(Category))
+    // be sure to include its associated Product data
+    .catch((err) => {
+      res.json(err);
+    });
+  res.status(200).json(Category);
 });
+
+
 
 router.delete('/:id', (req, res) => {
   // Delete a category by its id
@@ -53,13 +68,12 @@ router.delete('/:id', (req, res) => {
       id: req.params.id
     }
   })
-  .then((Category) => res.json(Category))
+    .then((Category) => res.json(Category))
     // be sure to include its associated Product data
     .catch((err) => {
       res.json(err);
     });
-  res.json(Category);
-  // res.sendStatus(200)
+  res.status(200).json(Category);
 });
 
 
