@@ -3,39 +3,43 @@ const { Tag, Product, ProductTag } = require('../../models');
 
 // The `/api/tags` endpoint
 
+// find all tags
 router.get('/', async (req, res) => {
   console.log('This is GET /api/tag');
-  // find all tags
   const tagData = await Tag.findAll({
     // be sure to include its associated Product data
-    include:{
+    include: {
       model: Product,
-      attributes: ['product_name','price','stock','category_id' ]
+      attributes: ['product_name', 'price', 'stock', 'category_id']
     }
   })
-  .catch((err) => {
-    res.json(err);
-  });
-res.status(200).json(tagData);
+    .catch((err) => {
+      res.json(err);
+    });
+  res.status(200).json(tagData);
 });
 
+// find a single tag by its `id`
 router.get('/:id', (req, res) => {
   console.log('This is GET /api/tag/id');
-  // find a single tag by its `id`
-  const tagData = await Tag.findOne({
-    // be sure to include its associated Product data
+  const tagData = Tag.findOne({
+    // be sure to include its associated Tag data
     where: {
       id: req.params.id
     }
   })
-  .catch((err) => {
-    res.json(err);
-  });
-res.status(200).json(tagData);
+    .catch((err) => {
+      res.json(err);
+    });
+  res.status(200).json(tagData);
 });
 
 router.post('/', (req, res) => {
   // create a new tag
+  //    {
+  //   "tag_name": "test",
+  //   "id": 1
+  //   }
   console.log('This is POST /api/tag/');
   Tag.create(req.body).then((Tag) => res.json(Tag))
     .catch((err) => {
@@ -46,7 +50,9 @@ router.post('/', (req, res) => {
 router.put('/:id', (req, res) => {
   // Update a category by its category name or id
   console.log('This is PUT /api/tag/id');
-  Tag.update({
+  Tag.update(
+    { tag_name: req.body.name },
+    {
       where: {
         id: req.params.id
       }
